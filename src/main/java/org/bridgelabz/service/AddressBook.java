@@ -12,24 +12,49 @@ import java.util.Scanner;
 
 public class AddressBook {
 
-    public List<Contact> listOfContacts;
-
-    public AddressBook(){
-        listOfContacts=new LinkedList<>();
-    }
 
     public void loadDataFromCSV() throws SQLException {
-        listOfContacts=new CSVOperations().getData();
+        List<Contact> listOfContacts=new CSVOperations().getData();
         SQLOperations.getInstance().insertDataInAllTables(listOfContacts);
 
     }
 
     public void loadDataFromJson() throws SQLException {
-        listOfContacts=new JSONOperations().getData();
+        List<Contact> listOfContacts=new JSONOperations().getData();
         SQLOperations.getInstance().insertDataInAllTables(listOfContacts);
     }
 
-    public void addContacts() {
+    public void addContacts() throws SQLException {
+        Scanner sc=new Scanner(System.in);
+        System.out.println("How many contacts do you want to add? ");
+        int numberOfContacts=sc.nextInt();
+        sc.nextLine();
+        List<Contact> listOfContacts=new LinkedList<>();
+        int count=0;
+        while(count<numberOfContacts){
+            Contact c=new Contact();
+            System.out.println("Enter book name : ");
+            c.setBookName(sc.nextLine());
+            System.out.println("Enter first name : ");
+            c.setFirstName(sc.nextLine());
+            System.out.println("Enter last name : ");
+            c.setLastName(sc.nextLine());
+            System.out.println("Enter address : ");
+            c.setAddress(sc.nextLine());
+            System.out.println("Enter city : ");
+            c.setCity(sc.nextLine());
+            System.out.println("Enter state : ");
+            c.setState(sc.nextLine());
+            System.out.println("Enter pin : ");
+            c.setPin(sc.nextLine());
+            System.out.println("Enter phone number : ");
+            c.setPhoneNumber(sc.nextLine());
+            System.out.println("Enter email : ");
+            c.setEmail(sc.nextLine());
+            listOfContacts.add(c);
+            count++;
+        }
+        SQLOperations.getInstance().insertDataInAllTables(listOfContacts);
     }
 
     public void searchMenu() throws SQLException {
