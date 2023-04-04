@@ -3,9 +3,7 @@ package org.bridgelabz.database;
 import org.bridgelabz.model.Contact;
 
 import java.sql.*;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class SQLOperations {
 
@@ -170,7 +168,7 @@ public class SQLOperations {
         closeConnection();
     }
 
-    public List<Contact> fetchContactsList(ResultSet rs) throws SQLException {
+    public List<Contact> toContactsList(ResultSet rs) throws SQLException {
         List<Contact> list = new LinkedList<>();
         while (rs.next()) {
             Contact c = new Contact();
@@ -270,26 +268,36 @@ public class SQLOperations {
     }
 
     public List<Contact> sort(String parameter) throws SQLException {
-        if(parameter.equals("name")) return sortByName();
+        if (parameter.equals("name")) return sortByName();
         String query = "SELECT * FROM CONTACTS ORDER BY ?";
         ps = con.prepareStatement(query);
         ps.setString(1, parameter);
         ResultSet rs = ps.executeQuery();
-        return fetchContactsList(rs);
+        return toContactsList(rs);
     }
 
     public List<Contact> sortByName() throws SQLException {
-        Scanner sc=new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         System.out.print("Enter first name : ");
-        String firstName=sc.nextLine();
+        String firstName = sc.nextLine();
         System.out.println("Enter last name : ");
-        String lastName=sc.nextLine();
-        String query="SELECT * FROM contacts ORDER BY CONCAT (?, ' ', ?)";
-        ps=con.prepareStatement(query);
+        String lastName = sc.nextLine();
+        String query = "SELECT * FROM contacts ORDER BY CONCAT (?, ' ', ?)";
+        ps = con.prepareStatement(query);
         ps.setString(1, firstName);
         ps.setString(2, lastName);
         ResultSet rs = ps.executeQuery();
-        return fetchContactsList(rs);
+        return toContactsList(rs);
+    }
+
+    public Map<String, Integer> count(String parameter) throws SQLException {
+        String query = "SELECT city, COUNT(*) FROM CONTACTS GROUP BY ?";
+        ps = con.prepareStatement(query);
+        ps.setString(1, parameter);
+        ResultSet rs = ps.executeQuery();
+        Map<String, Integer> map = new HashMap<>();
+        while (rs.next()) map.put(rs.getString(1),rs.getInt(2));
+        return map;
     }
 
 }

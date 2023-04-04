@@ -13,24 +13,24 @@ import java.util.Scanner;
 public class AddressBook {
 
     public void loadDataFromCSV() throws SQLException {
-        List<Contact> listOfContacts=new CSVOperations().getData();
+        List<Contact> listOfContacts = new CSVOperations().getData();
         SQLOperations.getInstance().insertDataInAllTables(listOfContacts);
     }
 
     public void loadDataFromJson() throws SQLException {
-        List<Contact> listOfContacts=new JSONOperations().getData();
+        List<Contact> listOfContacts = new JSONOperations().getData();
         SQLOperations.getInstance().insertDataInAllTables(listOfContacts);
     }
 
     public void addContacts() throws SQLException {
-        Scanner sc=new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         System.out.println("How many contacts do you want to add? ");
-        int numberOfContacts=sc.nextInt();
+        int numberOfContacts = sc.nextInt();
         sc.nextLine();
-        List<Contact> listOfContacts=new LinkedList<>();
-        int count=0;
-        while(count<numberOfContacts){
-            Contact c=new Contact();
+        List<Contact> listOfContacts = new LinkedList<>();
+        int count = 0;
+        while (count < numberOfContacts) {
+            Contact c = new Contact();
             System.out.println("Enter book name : ");
             c.setBookName(sc.nextLine());
             System.out.println("Enter first name : ");
@@ -56,11 +56,11 @@ public class AddressBook {
     }
 
     public void searchMenu() throws SQLException {
-        Scanner sc=new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.print("Search menu -> \nEnter choice : (1)Search by name (2)Search by city (3)Search by state (0)Go back to main menu : ");
-            int choice=sc.nextInt();
-            switch(choice){
+            int choice = sc.nextInt();
+            switch (choice) {
                 case 1 -> searchByName();
                 case 2 -> searchByCity();
                 case 3 -> searchByState();
@@ -72,80 +72,80 @@ public class AddressBook {
     }
 
     public void searchByName() throws SQLException {
-        Scanner sc=new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         System.out.print("Enter first name : ");
-        String firstName=sc.next();
+        String firstName = sc.next();
         System.out.print("Enter last name : ");
-        String lastName=sc.next();
+        String lastName = sc.next();
         sc.nextLine();
         System.out.println(SQLOperations.getInstance().searchByName(firstName, lastName));
     }
 
     public void searchByCity() throws SQLException {
-        Scanner sc=new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         System.out.print("Enter city : ");
-        String city=sc.next();
+        String city = sc.next();
         sc.nextLine();
         System.out.println(SQLOperations.getInstance().searchByCity(city));
     }
 
     public void searchByState() throws SQLException {
-        Scanner sc=new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         System.out.print("Enter state : ");
-        String state=sc.next();
+        String state = sc.next();
         sc.nextLine();
         System.out.println(SQLOperations.getInstance().searchByState(state));
     }
 
     public void edit() throws SQLException {
-        Scanner sc=new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         System.out.print("Enter first name : ");
-        String firstName=sc.nextLine();
+        String firstName = sc.nextLine();
         System.out.println("Enter last name : ");
-        String lastName=sc.nextLine();
+        String lastName = sc.nextLine();
         System.out.print("What do you want to edit? \n " +
                 "(1)First name (2)Last name (3)Address (4)City (5)State (6)Pin (7)Phone number (8)Email : ");
-        int choice=sc.nextInt();
+        int choice = sc.nextInt();
         sc.nextLine();
-        switch (choice){
-            case 1->{
+        switch (choice) {
+            case 1 -> {
                 System.out.println("Enter new firstName : ");
-                String newFirstName=sc.nextLine();
+                String newFirstName = sc.nextLine();
                 SQLOperations.getInstance().edit("firstName", newFirstName, firstName, lastName);
             }
-            case 2->{
+            case 2 -> {
                 System.out.println("Enter new lastName : ");
-                String newLastName=sc.nextLine();
+                String newLastName = sc.nextLine();
                 SQLOperations.getInstance().edit("lastName", newLastName, firstName, lastName);
             }
-            case 3->{
+            case 3 -> {
                 System.out.println("Enter new address : ");
-                String address=sc.nextLine();
+                String address = sc.nextLine();
                 SQLOperations.getInstance().edit("address", address, firstName, lastName);
             }
-            case 4->{
+            case 4 -> {
                 System.out.println("Enter new city : ");
-                String city=sc.nextLine();
+                String city = sc.nextLine();
                 SQLOperations.getInstance().edit("city", city, firstName, lastName);
             }
-            case 5-> {
+            case 5 -> {
                 System.out.println("Enter new state : ");
-                String state=sc.nextLine();
+                String state = sc.nextLine();
                 SQLOperations.getInstance().edit("state", state, firstName, lastName);
             }
-            case 6->{
+            case 6 -> {
                 System.out.println("Enter new pin : ");
-                String pin=sc.nextLine();
+                String pin = sc.nextLine();
                 SQLOperations.getInstance().edit("pin", pin, firstName, lastName);
             }
             case 7 -> {
                 System.out.println("Enter new phone number : ");
-                String phoneNumber=sc.nextLine();
+                String phoneNumber = sc.nextLine();
                 SQLOperations.getInstance().edit("phoneNumber", phoneNumber, firstName, lastName);
             }
             case 8 -> {
                 System.out.println("Enter new email : ");
-                String email=sc.nextLine();
+                String email = sc.nextLine();
                 SQLOperations.getInstance().edit("email", email, firstName, lastName);
             }
             default -> System.out.println("Wrong input!!!");
@@ -153,33 +153,54 @@ public class AddressBook {
     }
 
     public void deleteContact() throws SQLException {
-        Scanner sc=new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         System.out.print("Enter book name from which you want to delete : ");
-        String bookName=sc.nextLine();
+        String bookName = sc.nextLine();
         System.out.print("Enter first name : ");
-        String firstName=sc.nextLine();
+        String firstName = sc.nextLine();
         System.out.println("Enter last name : ");
-        String lastName=sc.nextLine();
+        String lastName = sc.nextLine();
         SQLOperations.getInstance().delete(bookName, firstName, lastName);
     }
 
-    public void sortMenu() throws SQLException {
-        Scanner sc=new Scanner(System.in);
+    public void sort() throws SQLException {
+        Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.print("Sort menu -> \nEnter choice : (1)Sort by name (2)Sort by city (3)Sort by state (4)Sort by pin (0)Go back to main menu : ");
-            int choice=sc.nextInt();
-            String parameter="name";
-            switch(choice){
-                case 1 -> parameter="name";
-                case 2 -> parameter="city";
-                case 3 -> parameter="state";
-                case 4 -> parameter="pin";
+            int choice = sc.nextInt();
+            String parameter = null;
+            switch (choice) {
+                case 1 -> parameter = "name";
+                case 2 -> parameter = "city";
+                case 3 -> parameter = "state";
+                case 4 -> parameter = "pin";
                 case 0 -> {
                     return;
                 }
-                default-> System.out.println("Wrong input!!!");
+                default -> System.out.println("Wrong input!!!");
             }
-            System.out.println(SQLOperations.getInstance().sort(parameter));
+            SQLOperations.getInstance().sort(parameter).forEach(c ->
+                System.out.println("firstName = " + c.getFirstName() + " | " + "lastName = " + c.getLastName() + " | " + "address = " + c.getAddress() + " | " +
+                        "city = " + c.getCity() + " | " + "state = " + c.getState() + " | " + "pin = " + c.getPin() + " | " +
+                        "phoneNumber = " + c.getPhoneNumber() + " | " + "email = " + c.getEmail()));
+        }
+    }
+
+    public void count() throws SQLException {
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            System.out.print("Count menu -> \nEnter choice : (1)Count by city (2)Count by state (0)Go back to main menu : ");
+            int choice = sc.nextInt();
+            String parameter = null;
+            switch (choice) {
+                case 1 -> parameter = "city";
+                case 2 -> parameter = "state";
+                case 0 -> {
+                    return;
+                }
+                default -> System.out.println("Wrong input!!!");
+            }
+            System.out.println(SQLOperations.getInstance().count(parameter));
         }
     }
 

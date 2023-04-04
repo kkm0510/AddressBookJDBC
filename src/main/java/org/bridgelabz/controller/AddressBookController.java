@@ -30,7 +30,8 @@ public class AddressBookController {
                     case 4 -> ab.edit();
                     case 5 -> ab.addContacts();
                     case 6 -> ab.deleteContact();
-                    case 7 -> ab.sortMenu();
+                    case 7 -> ab.sort();
+                    case 8 -> ab.count();
                     case 0 -> {
                         SQLOperations.getInstance().endProgram();
                         return;
