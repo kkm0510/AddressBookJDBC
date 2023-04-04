@@ -29,6 +29,9 @@ public class AddressBook {
         SQLOperations.getInstance().insertDataInAllTables(listOfContacts);
     }
 
+    public void addContacts() {
+    }
+
     public void searchMenu() throws SQLException {
         Scanner sc=new Scanner(System.in);
         while (true) {
@@ -125,4 +128,6 @@ public class AddressBook {
             default -> System.out.println("Wrong input!!!");
         }
     }
+
+
 }

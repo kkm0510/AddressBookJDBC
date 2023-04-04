@@ -19,7 +19,7 @@ public class AddressBookController {
         Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.print("Main menu -> \nEnter choice : (1)Load data from CSV (2)Load data from JSON " +
-                    "(3)Search (4)Edit (5)Delete (0)Exit : ");
+                    "(3)Search (4)Edit (5)Add contacts (6)Delete (0)Exit : ");
             try {
                 int choice = sc.nextInt();
                 sc.nextLine();
@@ -28,6 +28,7 @@ public class AddressBookController {
                     case 2 -> ab.loadDataFromJson();
                     case 3 -> ab.searchMenu();
                     case 4 -> ab.edit();
+                    case 5 -> ab.addContacts();
                     case 0 -> {
                         SQLOperations.getInstance().endProgram();
                         return;
