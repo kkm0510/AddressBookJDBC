@@ -5,6 +5,7 @@ import org.bridgelabz.model.Contact;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 
 public class SQLOperations {
 
@@ -169,6 +170,23 @@ public class SQLOperations {
         closeConnection();
     }
 
+    public List<Contact> fetchContactsList(ResultSet rs) throws SQLException {
+        List<Contact> list = new LinkedList<>();
+        while (rs.next()) {
+            Contact c = new Contact();
+            c.setFirstName(rs.getString(1));
+            c.setLastName(rs.getString(2));
+            c.setAddress(rs.getString(3));
+            c.setCity(rs.getString(4));
+            c.setState(rs.getString(5));
+            c.setPin(rs.getString(6));
+            c.setPhoneNumber(rs.getString(7));
+            c.setEmail(rs.getString(8));
+            list.add(c);
+        }
+        return list;
+    }
+
     public List<Contact> searchList(ResultSet rs) throws SQLException {
         List<Contact> list = new LinkedList<>();
         while (rs.next()) {
@@ -231,7 +249,7 @@ public class SQLOperations {
         ps.setString(2, newValue);
         ps.setString(3, firstName);
         ps.setString(4, lastName);
-        ps.executeUpdate();
+        if (ps.executeUpdate() > 0) System.out.println("Edited successfully");
     }
 
     public void delete(String bookName, String firstName, String lastName) throws SQLException {
@@ -241,18 +259,37 @@ public class SQLOperations {
         ps.setString(2, lastName);
         ps.setString(3, bookName);
         ps.executeUpdate();
-
         query = "DELETE from BOOKS where bookId NOT IN (SELECT bookId FROM contactBookRegister)";
         s = con.createStatement();
         s.executeUpdate(query);
-
         query = "DELETE FROM contacts WHERE firstName=? AND lastName=?";
         ps = con.prepareStatement(query);
         ps.setString(1, firstName);
         ps.setString(2, lastName);
-        ps.executeUpdate();
+        ps.executeQuery();
     }
 
+    public List<Contact> sort(String parameter) throws SQLException {
+        if(parameter.equals("name")) return sortByName();
+        String query = "SELECT * FROM CONTACTS ORDER BY ?";
+        ps = con.prepareStatement(query);
+        ps.setString(1, parameter);
+        ResultSet rs = ps.executeQuery();
+        return fetchContactsList(rs);
+    }
 
+    public List<Contact> sortByName() throws SQLException {
+        Scanner sc=new Scanner(System.in);
+        System.out.print("Enter first name : ");
+        String firstName=sc.nextLine();
+        System.out.println("Enter last name : ");
+        String lastName=sc.nextLine();
+        String query="SELECT * FROM contacts ORDER BY CONCAT (?, ' ', ?)";
+        ps=con.prepareStatement(query);
+        ps.setString(1, firstName);
+        ps.setString(2, lastName);
+        ResultSet rs = ps.executeQuery();
+        return fetchContactsList(rs);
+    }
 
 }

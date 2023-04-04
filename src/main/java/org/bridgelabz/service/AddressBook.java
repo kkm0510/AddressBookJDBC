@@ -162,4 +162,25 @@ public class AddressBook {
         String lastName=sc.nextLine();
         SQLOperations.getInstance().delete(bookName, firstName, lastName);
     }
+
+    public void sortMenu() throws SQLException {
+        Scanner sc=new Scanner(System.in);
+        while (true) {
+            System.out.print("Sort menu -> \nEnter choice : (1)Sort by name (2)Sort by city (3)Sort by state (4)Sort by pin (0)Go back to main menu : ");
+            int choice=sc.nextInt();
+            String parameter="name";
+            switch(choice){
+                case 1 -> parameter="name";
+                case 2 -> parameter="city";
+                case 3 -> parameter="state";
+                case 4 -> parameter="pin";
+                case 0 -> {
+                    return;
+                }
+                default-> System.out.println("Wrong input!!!");
+            }
+            System.out.println(SQLOperations.getInstance().sort(parameter));
+        }
+    }
+
 }
