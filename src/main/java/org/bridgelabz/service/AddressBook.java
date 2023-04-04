@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+import static  org.bridgelabz.util.Util.*;
 
 public class AddressBook {
 
@@ -61,10 +62,10 @@ public class AddressBook {
             System.out.print("Search menu -> \nEnter choice : (1)Search by name (2)Search by city (3)Search by state (0)Go back to main menu : ");
             int choice = sc.nextInt();
             switch (choice) {
-                case 1 -> searchByName();
-                case 2 -> searchByCity();
-                case 3 -> searchByState();
-                case 0 -> {
+                case NAME -> searchByName();
+                case CITY -> searchByCity();
+                case STATE -> searchByState();
+                case EXIT -> {
                     return;
                 }
             }
@@ -101,50 +102,50 @@ public class AddressBook {
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter first name : ");
         String firstName = sc.nextLine();
-        System.out.println("Enter last name : ");
+        System.out.print("Enter last name : ");
         String lastName = sc.nextLine();
-        System.out.print("What do you want to edit? \n " +
+        System.out.print("What do you want to edit? \n" +
                 "(1)First name (2)Last name (3)Address (4)City (5)State (6)Pin (7)Phone number (8)Email : ");
         int choice = sc.nextInt();
         sc.nextLine();
         switch (choice) {
-            case 1 -> {
-                System.out.println("Enter new firstName : ");
+            case FIRST_NAME -> {
+                System.out.print("Enter new firstName : ");
                 String newFirstName = sc.nextLine();
                 SQLOperations.getInstance().edit("firstName", newFirstName, firstName, lastName);
             }
-            case 2 -> {
-                System.out.println("Enter new lastName : ");
+            case LAST_NAME -> {
+                System.out.print("Enter new lastName : ");
                 String newLastName = sc.nextLine();
                 SQLOperations.getInstance().edit("lastName", newLastName, firstName, lastName);
             }
-            case 3 -> {
-                System.out.println("Enter new address : ");
+            case ADDRESS -> {
+                System.out.print("Enter new address : ");
                 String address = sc.nextLine();
                 SQLOperations.getInstance().edit("address", address, firstName, lastName);
             }
-            case 4 -> {
-                System.out.println("Enter new city : ");
+            case CITY_NAME -> {
+                System.out.print("Enter new city : ");
                 String city = sc.nextLine();
                 SQLOperations.getInstance().edit("city", city, firstName, lastName);
             }
-            case 5 -> {
-                System.out.println("Enter new state : ");
+            case STATE_NAME -> {
+                System.out.print("Enter new state : ");
                 String state = sc.nextLine();
                 SQLOperations.getInstance().edit("state", state, firstName, lastName);
             }
-            case 6 -> {
-                System.out.println("Enter new pin : ");
+            case PIN_NUM -> {
+                System.out.print("Enter new pin : ");
                 String pin = sc.nextLine();
                 SQLOperations.getInstance().edit("pin", pin, firstName, lastName);
             }
-            case 7 -> {
-                System.out.println("Enter new phone number : ");
+            case PHONE_NUM -> {
+                System.out.print("Enter new phone number : ");
                 String phoneNumber = sc.nextLine();
                 SQLOperations.getInstance().edit("phoneNumber", phoneNumber, firstName, lastName);
             }
-            case 8 -> {
-                System.out.println("Enter new email : ");
+            case EMAIL -> {
+                System.out.print("Enter new email : ");
                 String email = sc.nextLine();
                 SQLOperations.getInstance().edit("email", email, firstName, lastName);
             }
@@ -158,7 +159,7 @@ public class AddressBook {
         String bookName = sc.nextLine();
         System.out.print("Enter first name : ");
         String firstName = sc.nextLine();
-        System.out.println("Enter last name : ");
+        System.out.print("Enter last name : ");
         String lastName = sc.nextLine();
         SQLOperations.getInstance().delete(bookName, firstName, lastName);
     }
@@ -170,10 +171,10 @@ public class AddressBook {
             int choice = sc.nextInt();
             String parameter = null;
             switch (choice) {
-                case 1 -> parameter = "name";
-                case 2 -> parameter = "city";
-                case 3 -> parameter = "state";
-                case 4 -> parameter = "pin";
+                case NAME -> parameter = "name";
+                case CITY -> parameter = "city";
+                case STATE -> parameter = "state";
+                case PIN -> parameter = "pin";
                 case 0 -> {
                     return;
                 }
@@ -193,9 +194,9 @@ public class AddressBook {
             int choice = sc.nextInt();
             String parameter = null;
             switch (choice) {
-                case 1 -> parameter = "city";
-                case 2 -> parameter = "state";
-                case 0 -> {
+                case COUNT_BY_CITY -> parameter = "city";
+                case COUNT_BY_STATE -> parameter = "state";
+                case EXIT-> {
                     return;
                 }
                 default -> System.out.println("Wrong input!!!");

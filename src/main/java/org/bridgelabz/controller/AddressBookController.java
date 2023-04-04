@@ -5,6 +5,7 @@ import org.bridgelabz.exception.AddressBookException;
 import org.bridgelabz.service.AddressBook;
 import java.sql.SQLException;
 import java.util.Scanner;
+import static  org.bridgelabz.util.Util.*;
 
 public class AddressBookController {
 
@@ -13,33 +14,33 @@ public class AddressBookController {
         try {
             SQLOperations.getInstance().initializeSQLDatabase();
         } catch (Exception e) {
-            e.printStackTrace();
-            SQLOperations.getInstance().endProgram();
+            System.out.println(e.getMessage());
+            SQLOperations.getInstance().closeConnection();
         }
         Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.print("Main menu -> \nEnter choice : (1)Load data from CSV (2)Load data from JSON " +
-                    "(3)Search (4)Edit (5)Add contacts (6)Delete (7)Sort (0)Exit : ");
+                    "(3)Search (4)Edit (5)Add contacts (6)Delete (7)Sort (8)Count (0)Exit : ");
             try {
                 int choice = sc.nextInt();
                 sc.nextLine();
                 switch (choice) {
-                    case 1 -> ab.loadDataFromCSV();
-                    case 2 -> ab.loadDataFromJson();
-                    case 3 -> ab.searchMenu();
-                    case 4 -> ab.edit();
-                    case 5 -> ab.addContacts();
-                    case 6 -> ab.deleteContact();
-                    case 7 -> ab.sort();
-                    case 8 -> ab.count();
-                    case 0 -> {
-                        SQLOperations.getInstance().endProgram();
+                    case CSV -> ab.loadDataFromCSV();
+                    case JSON -> ab.loadDataFromJson();
+                    case SEARCH -> ab.searchMenu();
+                    case EDIT -> ab.edit();
+                    case ADD -> ab.addContacts();
+                    case DELETE -> ab.deleteContact();
+                    case SORT -> ab.sort();
+                    case COUNT -> ab.count();
+                    case EXIT -> {
+                        SQLOperations.getInstance().closeConnection();
                         return;
                     }
                     default -> throw new AddressBookException("Wrong input");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }
     }
