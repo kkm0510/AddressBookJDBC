@@ -12,11 +12,10 @@ public class SQLOperations {
     private Statement s;
     private PreparedStatement ps;
 
-    private SQLOperations() throws SQLException {
-        connectToServer();
+    private SQLOperations() {
     }
 
-    public static SQLOperations getInstance() throws SQLException {
+    public static SQLOperations getInstance()  {
         if(sql==null){
             sql=new SQLOperations();
         }

@@ -1,24 +1,20 @@
 package org.bridgelabz.controller;
 
 import org.bridgelabz.database.SQLOperations;
-import org.bridgelabz.database.TableEnum;
 import org.bridgelabz.exception.AddressBookException;
 import org.bridgelabz.service.AddressBook;
-import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Scanner;
 import static  org.bridgelabz.util.Util.*;
 
 public class AddressBookController {
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         AddressBook ab = new AddressBook();
         try {
             SQLOperations.getInstance().initializeSQLDatabase();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        Arrays.stream(TableEnum.values()).forEach(table-> System.out.println(table.toString()));
         Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.print("Main menu -> \nEnter choice : (1)Load data from File (2)Create database " +
