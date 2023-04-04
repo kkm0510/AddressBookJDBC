@@ -226,11 +226,30 @@ public class SQLOperations {
 
     public void edit(String whatToEdit, String newValue, String firstName, String lastName) throws SQLException {
         String query = "UPDATE contacts SET ? = ? WHERE firstname = ? AND lastName = ?";
-        ps=con.prepareStatement(query);
+        ps = con.prepareStatement(query);
         ps.setString(1, whatToEdit);
         ps.setString(2, newValue);
         ps.setString(3, firstName);
         ps.setString(4, lastName);
+        ps.executeUpdate();
+    }
+
+    public void delete(String bookName, String firstName, String lastName) throws SQLException {
+        String query = "DELETE FROM contactBookRegister WHERE contactId IN (SELECT id FROM contacts WHERE firstname=? AND lastName=?) AND bookId (SELECT bookId FROM books WHERE bookName=?)";
+        ps = con.prepareStatement(query);
+        ps.setString(1, firstName);
+        ps.setString(2, lastName);
+        ps.setString(3, bookName);
+        ps.executeUpdate();
+
+        query = "DELETE from BOOKS where bookId NOT IN (SELECT bookId FROM contactBookRegister)";
+        s = con.createStatement();
+        s.executeUpdate(query);
+
+        query = "DELETE FROM contacts WHERE firstName=? AND lastName=?";
+        ps = con.prepareStatement(query);
+        ps.setString(1, firstName);
+        ps.setString(2, lastName);
         ps.executeUpdate();
     }
 

@@ -12,11 +12,9 @@ import java.util.Scanner;
 
 public class AddressBook {
 
-
     public void loadDataFromCSV() throws SQLException {
         List<Contact> listOfContacts=new CSVOperations().getData();
         SQLOperations.getInstance().insertDataInAllTables(listOfContacts);
-
     }
 
     public void loadDataFromJson() throws SQLException {
@@ -154,5 +152,14 @@ public class AddressBook {
         }
     }
 
-
+    public void deleteContact() throws SQLException {
+        Scanner sc=new Scanner(System.in);
+        System.out.print("Enter book name from which you want to delete : ");
+        String bookName=sc.nextLine();
+        System.out.print("Enter first name : ");
+        String firstName=sc.nextLine();
+        System.out.println("Enter last name : ");
+        String lastName=sc.nextLine();
+        SQLOperations.getInstance().delete(bookName, firstName, lastName);
+    }
 }
