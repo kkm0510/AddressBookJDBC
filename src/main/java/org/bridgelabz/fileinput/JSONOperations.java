@@ -9,9 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class JSONOperations {
+public class JSONOperations implements FileIO{
 
-    public static final String INPUT_PATH = "src/main/resources/input/ABDataIn.json";
+    private static final String INPUT_PATH = "src/main/resources/input/ABDataIn.json";
 
     public List<Contact> getData() {
         try (Reader reader = Files.newBufferedReader(Paths.get(INPUT_PATH))) {

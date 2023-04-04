@@ -17,8 +17,8 @@ public class SQLOperations {
     }
 
     public static SQLOperations getInstance() throws SQLException {
-        if (sql == null) {
-            sql = new SQLOperations();
+        if(sql==null){
+            sql=new SQLOperations();
         }
         return sql;
     }
@@ -27,21 +27,26 @@ public class SQLOperations {
         connectToServer();
         createDatabase();
         connectToDatabase();
-        createContactsTable();
-        createBooksTable();
-        createContactBookRegister();
+        createTable();
     }
 
-    public void closeConnection() throws SQLException {
+    public void deleteDatabase() throws SQLException {
         String query = "DROP DATABASE addressbook";
         s = con.createStatement();
         s.executeUpdate(query);
+    }
+
+    public void closeConnection() throws SQLException {
+        deleteDatabase();
         con.close();
-        System.out.println("database disconnected");
+        System.out.println("Disconnected");
     }
 
     public void connectToServer() throws SQLException {
-        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "kkm0510");
+        String url=System.getenv("dbServerURL");
+        String user=System.getenv("dbUser");
+        String pass=System.getenv("dbPassword");
+        con = DriverManager.getConnection(url, user, pass);
     }
 
     public void createDatabase() throws SQLException {
@@ -54,31 +59,19 @@ public class SQLOperations {
         String query = "USE addressbook";
         s = con.createStatement();
         s.executeUpdate(query);
-        System.out.println("connected to database");
+        System.out.println("Connected");
     }
 
-    public void createTable(String name, String description) throws SQLException {
-        String query = "CREATE TABLE " + name + " (" + description + ")";
-        s = con.createStatement();
-        s.executeUpdate(query);
+    public void createTable() throws SQLException {
+        TableEnum[] arr=TableEnum.values();
+        for(TableEnum table:arr){
+            String query = "CREATE TABLE " + table.getNAME() + " (" + table.getDESCRIPTION() + ")";
+            s = con.createStatement();
+            s.executeUpdate(query);
+        }
     }
 
-    public void createContactsTable() throws SQLException {
-        String description = "id int AUTO_INCREMENT PRIMARY KEY, firstName varchar(30) not null, lastName varchar(30) not null, address varchar(150) not null, city varchar(30) not null, state varchar(30) not null, pin varchar(6) not null, phoneNumber varchar(10) not null, email varchar(150) not null";
-        createTable("contacts", description);
-    }
-
-    public void createBooksTable() throws SQLException {
-        String description = "bookId int auto_increment primary key, bookName varchar(30) not null";
-        createTable("Books", description);
-    }
-
-    private void createContactBookRegister() throws SQLException {
-        String description = "contactId int not null, bookId int not null, primary key (contactId, bookId), foreign key (bookId) references books (bookId), foreign key (contactId) references contacts (id)";
-        createTable("contactBookRegister", description);
-    }
-
-    public void insertDataInAllTables(List<Contact> list) throws SQLException {
+    public void insertDataInTables(List<Contact> list) throws SQLException {
         insertDataInContactsTable(list);
         insertDataInBooksTable(list);
         insertDataInContactBookTable(list);
@@ -239,7 +232,9 @@ public class SQLOperations {
     }
 
     public void delete(String bookName, String firstName, String lastName) throws SQLException {
-        String query = "DELETE FROM contactBookRegister WHERE contactId IN (SELECT id FROM contacts WHERE firstname=? AND lastName=?) AND bookId IN (SELECT bookId FROM books WHERE bookName=?)";
+        String query = "DELETE FROM contactBookRegister " +
+                "WHERE contactId IN (SELECT id FROM contacts WHERE firstname=? AND lastName=?) " +
+                "AND bookId IN (SELECT bookId FROM books WHERE bookName=?)";
         ps = con.prepareStatement(query);
         ps.setString(1, firstName);
         ps.setString(2, lastName);
@@ -248,7 +243,8 @@ public class SQLOperations {
         query = "DELETE FROM books WHERE bookId NOT IN (SELECT bookId FROM contactBookRegister)";
         s = con.createStatement();
         s.executeUpdate(query);
-        query = "DELETE FROM contacts WHERE id NOT IN (SELECT contactId FROM contactBookRegister) AND firstName=? AND lastName=?";
+        query = "DELETE FROM contacts " +
+                "WHERE id NOT IN (SELECT contactId FROM contactBookRegister) AND firstName=? AND lastName=?";
         ps = con.prepareStatement(query);
         ps.setString(1, firstName);
         ps.setString(2, lastName);
@@ -257,8 +253,7 @@ public class SQLOperations {
     }
 
     public List<Contact> sort(String parameter) throws SQLException {
-        if (parameter.equals("name"))
-            parameter = "CONCAT (firstName, ' ', lastName)";
+        if (parameter.equals("name")) parameter = "CONCAT (firstName, ' ', lastName)";
         String query = "SELECT * FROM CONTACTS ORDER BY " + parameter;
         s = con.createStatement();
         ResultSet rs = s.executeQuery(query);
@@ -273,5 +268,4 @@ public class SQLOperations {
         while (rs.next()) map.put(rs.getString(1), rs.getInt(2));
         return map;
     }
-
 }

@@ -2,6 +2,8 @@ package org.bridgelabz.service;
 
 import org.bridgelabz.database.SQLOperations;
 import org.bridgelabz.fileinput.CSVOperations;
+import org.bridgelabz.fileinput.EXCELOperations;
+import org.bridgelabz.fileinput.FileIO;
 import org.bridgelabz.fileinput.JSONOperations;
 import org.bridgelabz.model.Contact;
 
@@ -13,14 +15,25 @@ import static  org.bridgelabz.util.Util.*;
 
 public class AddressBook {
 
-    public void loadDataFromCSV() throws SQLException {
-        List<Contact> listOfContacts = new CSVOperations().getData();
-        SQLOperations.getInstance().insertDataInAllTables(listOfContacts);
-    }
-
-    public void loadDataFromJson() throws SQLException {
-        List<Contact> listOfContacts = new JSONOperations().getData();
-        SQLOperations.getInstance().insertDataInAllTables(listOfContacts);
+    public void loadDataFromFile() throws SQLException {
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            System.out.print("File Reader menu -> \nEnter choice : (1)Read CSV " +
+                    "(2)Read JSON (3)Read Excel (0)Go back to main menu : ");
+            int choice = sc.nextInt();
+            FileIO file=null;
+            switch (choice) {
+                case CSV -> file=new CSVOperations();
+                case JSON -> file=new JSONOperations();
+                case EXCEL -> file=new EXCELOperations();
+                case EXIT -> {
+                    return;
+                }
+                default -> System.out.println("Wrong input!!!");
+            }
+            if (file != null)
+                SQLOperations.getInstance().insertDataInTables(file.getData());
+        }
     }
 
     public void addContacts() throws SQLException {
@@ -53,7 +66,7 @@ public class AddressBook {
             listOfContacts.add(c);
             count++;
         }
-        SQLOperations.getInstance().insertDataInAllTables(listOfContacts);
+        SQLOperations.getInstance().insertDataInTables(listOfContacts);
     }
 
     public void searchMenu() throws SQLException {
@@ -180,10 +193,13 @@ public class AddressBook {
                 }
                 default -> System.out.println("Wrong input!!!");
             }
-            SQLOperations.getInstance().sort(parameter).forEach(c ->
-                System.out.println("firstName = " + c.getFirstName() + " | " + "lastName = " + c.getLastName() + " | " + "address = " + c.getAddress() + " | " +
-                        "city = " + c.getCity() + " | " + "state = " + c.getState() + " | " + "pin = " + c.getPin() + " | " +
-                        "phoneNumber = " + c.getPhoneNumber() + " | " + "email = " + c.getEmail()));
+            if (parameter != null) {
+                SQLOperations.getInstance().sort(parameter).forEach(c ->
+                    System.out.println("firstName = " + c.getFirstName() + " | " + "lastName = " + c.getLastName() + " | " + "address = " + c.getAddress() + " | " +
+                            "city = " + c.getCity() + " | " + "state = " + c.getState() + " | " + "pin = " + c.getPin() + " | " +
+                            "phoneNumber = " + c.getPhoneNumber() + " | " + "email = " + c.getEmail())
+                );
+            }
         }
     }
 
