@@ -10,11 +10,7 @@ public class AddressBookController {
 
     public static void main(String[] args) {
         AddressBook ab = new AddressBook();
-        try {
-            SQLOperations.getInstance().initializeDatabase();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        SQLOperations.getInstance().initializeDatabase();
         Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.print("Main menu -> \n(1)Load data from File (2)Create database " +

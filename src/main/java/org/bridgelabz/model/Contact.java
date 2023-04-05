@@ -119,18 +119,10 @@ public class Contact {
                 "\n";
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(firstName, lastName, address, city, state, pin, phoneNumber, email);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        Contact c = (Contact) obj;
-        return (firstName + lastName + address + city + state + pin + phoneNumber + email)
-                .equals(c.firstName + c.lastName + c.address + c.city + c.state + c.pin + c.phoneNumber + c.email);
+    public void print(){
+        System.out.println("firstName = " + firstName + " | " + "lastName = " + lastName + " | " + "address = " + address + " | " +
+                "city = " + city + " | " + "state = " + state + " | " + "pin = " + pin + " | " +
+                "phoneNumber = " + phoneNumber + " | " + "email = " + email);
     }
 
 }

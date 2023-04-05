@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class CSVOperations implements FileIO{
+public class CSVOperations implements FileIO {
 
     private static final String INPUT_PATH = "src/main/resources/input/ABDataIn.csv";
 
