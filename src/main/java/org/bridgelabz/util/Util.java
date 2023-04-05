@@ -12,6 +12,8 @@ public class Util {
     public static final int SORT=8;
     public static final int COUNT=9;;
     public static final int PRINT_TABLES=10;
+    public static final int PRINT_ADDRESS_BOOK=11;
+    public static final int USE_DATABASE=12;
     public static final int EXIT=0;
 
     public static final int NAME=1;

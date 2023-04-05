@@ -17,9 +17,9 @@ public class AddressBookController {
         }
         Scanner sc = new Scanner(System.in);
         while (true) {
-            System.out.print("Main menu -> \nEnter choice : (1)Load data from File (2)Create database " +
-                    "(3)Delete database (4)Search (5)Edit (6)Add contacts (7)Delete (8)Sort (9)Count " +
-                    "(10)Print all tables (0)Exit : ");
+            System.out.print("Main menu -> \n(1)Load data from File (2)Create database " +
+                    "(3)Delete database (4)Search (5)Edit (6)Add contacts \n(7)Delete (8)Sort (9)Count " +
+                    "(10)Print all tables (11)Print address book (12)Use database (0)Exit : ");
             try {
                 int choice = sc.nextInt();
                 sc.nextLine();
@@ -34,6 +34,8 @@ public class AddressBookController {
                     case SORT -> ab.sort();
                     case COUNT -> ab.count();
                     case PRINT_TABLES -> SQLOperations.getInstance().printAllTables();
+                    case PRINT_ADDRESS_BOOK -> SQLOperations.getInstance().printAddressBookContacts();
+                    case USE_DATABASE -> SQLOperations.getInstance().connectToDatabase();
                     case EXIT -> {
                         SQLOperations.getInstance().closeConnection();
                         return;

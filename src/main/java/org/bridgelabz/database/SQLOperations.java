@@ -223,24 +223,22 @@ public class SQLOperations {
         return searchList(rs);
     }
 
-    public void delete(String bookName, String firstName, String lastName) throws SQLException {
+    public void delete(int bookId, String firstName, String lastName) throws SQLException {
+        int id=getContactId(bookId, firstName, lastName);
         String query = "DELETE FROM contactBookRegister " +
-                "WHERE contactId IN (SELECT id FROM contacts WHERE firstname=? AND lastName=?) " +
-                "AND bookId IN (SELECT bookId FROM books WHERE bookName=?)";
+                "WHERE contactId = ? " +
+                "AND bookId = ?";
         ps = con.prepareStatement(query);
-        ps.setString(1, firstName);
-        ps.setString(2, lastName);
-        ps.setString(3, bookName);
+        ps.setInt(1, id);
+        ps.setInt(2, bookId);
         ps.executeUpdate();
         query = "DELETE FROM books WHERE bookId NOT IN (SELECT bookId FROM contactBookRegister)";
         s = con.createStatement();
         s.executeUpdate(query);
         query = "DELETE FROM contacts " +
-                "WHERE id NOT IN (SELECT contactId FROM contactBookRegister) AND firstName=? AND lastName=?";
-        ps = con.prepareStatement(query);
-        ps.setString(1, firstName);
-        ps.setString(2, lastName);
-        ps.executeUpdate();
+                "WHERE id NOT IN (SELECT contactId FROM contactBookRegister)";
+        s = con.createStatement();
+        s.executeUpdate(query);
         System.out.println("Deleted Successfully");
     }
 
@@ -269,21 +267,21 @@ public class SQLOperations {
         if (ps.executeUpdate() > 0) System.out.println("Edited successfully");
     }
 
-    public int getContactId(String bookName, String firstName, String lastName) throws SQLException {
+    public int getContactId(int bookId, String firstName, String lastName) throws SQLException {
         String query = "SELECT c.* "  +
                 "FROM contacts c " +
                 "JOIN contactBookRegister cbr ON c.id = cbr.contactId " +
                 "JOIN books b ON cbr.bookId = b.bookId " +
                 "WHERE c.firstName = ? " +
                 "AND c.lastName = ? " +
-                "AND b.bookName = ?";
+                "AND b.bookId = ?";
         ps = con.prepareStatement(query);
         ps.setString(1, firstName);
         ps.setString(2, lastName);
-        ps.setString(3, bookName);
+        ps.setInt(3, bookId);
         ResultSet rs = ps.executeQuery();
         printContactsResultSet(rs);
-        System.out.print("Select contact id which you want to edit : ");
+        System.out.print("Select contact id : ");
         return new Scanner(System.in).nextInt();
     }
 
@@ -331,5 +329,19 @@ public class SQLOperations {
             System.out.print("Contact Id : " + rs.getInt(1) + " -> ");
             System.out.println("Book Id : " + rs.getInt(2));
         }
+    }
+
+    public void printAddressBookContacts() throws SQLException {
+        printBooksTable();
+        System.out.print("Select book id : ");
+        int bookId=new Scanner(System.in).nextInt();
+        String query="SELECT * FROM contacts c " +
+                "JOIN contactBookRegister cbr ON cbr.contactId=c.id " +
+                "JOIN books b ON b.bookId=cbr.bookId " +
+                "WHERE b.bookId=?";
+        ps = con.prepareStatement(query);
+        ps.setInt(1, bookId);
+        ResultSet rs = ps.executeQuery();
+        printContactsResultSet(rs);
     }
 }

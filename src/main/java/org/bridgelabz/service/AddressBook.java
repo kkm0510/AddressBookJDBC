@@ -113,13 +113,15 @@ public class AddressBook {
 
     public void edit() throws SQLException {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter book name : ");
-        String bookName = sc.nextLine();
+        SQLOperations.getInstance().printBooksTable();
+        System.out.print("Enter book id from which you want to delete : ");
+        int bookId = sc.nextInt();
+        sc.nextLine();
         System.out.print("Enter first name : ");
         String firstName = sc.nextLine();
         System.out.print("Enter last name : ");
         String lastName = sc.nextLine();
-        int id=SQLOperations.getInstance().getContactId(bookName, firstName, lastName);
+        int id=SQLOperations.getInstance().getContactId(bookId, firstName, lastName);
         System.out.print("What do you want to edit? \n" +
                 "(1)First name (2)Last name (3)Address (4)City (5)State (6)Pin (7)Phone number (8)Email : ");
         int choice = sc.nextInt();
@@ -173,13 +175,15 @@ public class AddressBook {
 
     public void deleteContact() throws SQLException {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter book name from which you want to delete : ");
-        String bookName = sc.nextLine();
+        SQLOperations.getInstance().printBooksTable();
+        System.out.print("Enter book id from which you want to delete : ");
+        int bookId = sc.nextInt();
+        sc.nextLine();
         System.out.print("Enter first name : ");
         String firstName = sc.nextLine();
         System.out.print("Enter last name : ");
         String lastName = sc.nextLine();
-        SQLOperations.getInstance().delete(bookName, firstName, lastName);
+        SQLOperations.getInstance().delete(bookId, firstName, lastName);
     }
 
     public void sort() throws SQLException {
