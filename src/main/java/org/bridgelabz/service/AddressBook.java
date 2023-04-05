@@ -113,57 +113,62 @@ public class AddressBook {
 
     public void edit() throws SQLException {
         Scanner sc = new Scanner(System.in);
+        System.out.print("Enter book name : ");
+        String bookName = sc.nextLine();
         System.out.print("Enter first name : ");
         String firstName = sc.nextLine();
         System.out.print("Enter last name : ");
         String lastName = sc.nextLine();
+        int id=SQLOperations.getInstance().getContactId(bookName, firstName, lastName);
         System.out.print("What do you want to edit? \n" +
                 "(1)First name (2)Last name (3)Address (4)City (5)State (6)Pin (7)Phone number (8)Email : ");
         int choice = sc.nextInt();
+        String whatToEdit=null, newValue=null;
         sc.nextLine();
         switch (choice) {
             case FIRST_NAME -> {
                 System.out.print("Enter new firstName : ");
-                String newFirstName = sc.nextLine();
-                SQLOperations.getInstance().edit("firstName", newFirstName, firstName, lastName);
+                newValue = sc.nextLine();
+                whatToEdit="firstName";
             }
             case LAST_NAME -> {
                 System.out.print("Enter new lastName : ");
-                String newLastName = sc.nextLine();
-                SQLOperations.getInstance().edit("lastName", newLastName, firstName, lastName);
+                newValue = sc.nextLine();
+                whatToEdit="lastName";
             }
             case ADDRESS -> {
                 System.out.print("Enter new address : ");
-                String address = sc.nextLine();
-                SQLOperations.getInstance().edit("address", address, firstName, lastName);
+                newValue = sc.nextLine();
+                whatToEdit="address";
             }
             case CITY_NAME -> {
-                System.out.print("Enter new city : ");
-                String city = sc.nextLine();
-                SQLOperations.getInstance().edit("city", city, firstName, lastName);
+                System.out.print("Enter new city name : ");
+                newValue = sc.nextLine();
+                whatToEdit="city";
             }
             case STATE_NAME -> {
-                System.out.print("Enter new state : ");
-                String state = sc.nextLine();
-                SQLOperations.getInstance().edit("state", state, firstName, lastName);
+                System.out.print("Enter new state name : ");
+                newValue = sc.nextLine();
+                whatToEdit="state";
             }
             case PIN_NUM -> {
                 System.out.print("Enter new pin : ");
-                String pin = sc.nextLine();
-                SQLOperations.getInstance().edit("pin", pin, firstName, lastName);
+                newValue = sc.nextLine();
+                whatToEdit="pin";
             }
             case PHONE_NUM -> {
                 System.out.print("Enter new phone number : ");
-                String phoneNumber = sc.nextLine();
-                SQLOperations.getInstance().edit("phoneNumber", phoneNumber, firstName, lastName);
+                newValue = sc.nextLine();
+                whatToEdit="phoneNumber";
             }
             case EMAIL -> {
                 System.out.print("Enter new email : ");
-                String email = sc.nextLine();
-                SQLOperations.getInstance().edit("email", email, firstName, lastName);
+                newValue = sc.nextLine();
+                whatToEdit="email";
             }
             default -> System.out.println("Wrong input!!!");
         }
+        SQLOperations.getInstance().edit(whatToEdit, newValue, id);
     }
 
     public void deleteContact() throws SQLException {

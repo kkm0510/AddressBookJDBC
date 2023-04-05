@@ -15,15 +15,15 @@ public class SQLOperations {
     private SQLOperations() {
     }
 
-    public static SQLOperations getInstance()  {
-        if(sql==null){
-            sql=new SQLOperations();
+    public static SQLOperations getInstance() {
+        if (sql == null) {
+            sql = new SQLOperations();
         }
         return sql;
     }
 
-    public void initializeSQLDatabase() throws SQLException {
-        connectToServer();
+    public void initializeDatabase() throws SQLException {
+        if(con==null || con.isClosed()) connectToServer();
         createDatabase();
         connectToDatabase();
         createTable();
@@ -33,6 +33,7 @@ public class SQLOperations {
         String query = "DROP DATABASE addressbook";
         s = con.createStatement();
         s.executeUpdate(query);
+        System.out.println("Database deleted");
     }
 
     public void closeConnection() throws SQLException {
@@ -42,28 +43,29 @@ public class SQLOperations {
     }
 
     public void connectToServer() throws SQLException {
-        String url=System.getenv("dbServerURL");
-        String user=System.getenv("dbUser");
-        String pass=System.getenv("dbPassword");
+        String url = System.getenv("dbServerURL");
+        String user = System.getenv("dbUser");
+        String pass = System.getenv("dbPassword");
         con = DriverManager.getConnection(url, user, pass);
+        System.out.println("Connected");
     }
 
     public void createDatabase() throws SQLException {
         String query = "CREATE DATABASE addressbook";
         s = con.createStatement();
         s.executeUpdate(query);
+        System.out.println("Database created");
     }
 
     public void connectToDatabase() throws SQLException {
         String query = "USE addressbook";
         s = con.createStatement();
         s.executeUpdate(query);
-        System.out.println("Connected");
     }
 
     public void createTable() throws SQLException {
-        TableEnum[] arr=TableEnum.values();
-        for(TableEnum table:arr){
+        TableEnum[] arr = TableEnum.values();
+        for (TableEnum table : arr) {
             String query = "CREATE TABLE " + table.getNAME() + " (" + table.getDESCRIPTION() + ")";
             s = con.createStatement();
             s.executeUpdate(query);
@@ -221,15 +223,6 @@ public class SQLOperations {
         return searchList(rs);
     }
 
-    public void edit(String whatToEdit, String newValue, String firstName, String lastName) throws SQLException {
-        String query = "UPDATE contacts SET " + whatToEdit + " = ? WHERE firstname = ? AND lastName = ?";
-        ps = con.prepareStatement(query);
-        ps.setString(1, newValue);
-        ps.setString(2, firstName);
-        ps.setString(3, lastName);
-        if (ps.executeUpdate() > 0) System.out.println("Edited successfully");
-    }
-
     public void delete(String bookName, String firstName, String lastName) throws SQLException {
         String query = "DELETE FROM contactBookRegister " +
                 "WHERE contactId IN (SELECT id FROM contacts WHERE firstname=? AND lastName=?) " +
@@ -261,10 +254,82 @@ public class SQLOperations {
 
     public Map<String, Integer> count(String parameter) throws SQLException {
         String query = "SELECT " + parameter + ", COUNT(*) FROM CONTACTS GROUP BY " + parameter;
-        ps = con.prepareStatement(query);
-        ResultSet rs = ps.executeQuery();
+        s = con.createStatement();
+        ResultSet rs = s.executeQuery(query);
         Map<String, Integer> map = new HashMap<>();
         while (rs.next()) map.put(rs.getString(1), rs.getInt(2));
         return map;
+    }
+
+    public void edit(String whatToEdit, String newValue, int id) throws SQLException {
+        String query = "UPDATE contacts SET " + whatToEdit + " = ? WHERE id = ?";
+        ps = con.prepareStatement(query);
+        ps.setString(1, newValue);
+        ps.setInt(2, id);
+        if (ps.executeUpdate() > 0) System.out.println("Edited successfully");
+    }
+
+    public int getContactId(String bookName, String firstName, String lastName) throws SQLException {
+        String query = "SELECT c.* "  +
+                "FROM contacts c " +
+                "JOIN contactBookRegister cbr ON c.id = cbr.contactId " +
+                "JOIN books b ON cbr.bookId = b.bookId " +
+                "WHERE c.firstName = ? " +
+                "AND c.lastName = ? " +
+                "AND b.bookName = ?";
+        ps = con.prepareStatement(query);
+        ps.setString(1, firstName);
+        ps.setString(2, lastName);
+        ps.setString(3, bookName);
+        ResultSet rs = ps.executeQuery();
+        printContactsResultSet(rs);
+        System.out.print("Select contact id which you want to edit : ");
+        return new Scanner(System.in).nextInt();
+    }
+
+    public void printContactsResultSet(ResultSet rs) throws SQLException {
+        while (rs.next()) {
+            System.out.print("Id : " + rs.getInt(1) + "  ");
+            for (int i = 2; i <= 9; i++) {
+                System.out.print(rs.getString(i) + "  ");
+            }
+            System.out.println();
+        }
+    }
+
+    public void printAllTables() throws SQLException {
+        printContactsTable();
+        printBooksTable();
+        printContactBookRegisterTable();
+    }
+
+    public void printContactsTable() throws SQLException {
+        String query = "SELECT * FROM contacts";
+        s = con.createStatement();
+        ResultSet rs = s.executeQuery(query);
+        System.out.println("\nContacts table -> ");
+        printContactsResultSet(rs);
+    }
+
+    public void printBooksTable() throws SQLException {
+        String query = "SELECT * FROM books";
+        s = con.createStatement();
+        ResultSet rs = s.executeQuery(query);
+        System.out.println("\nBooks table -> ");
+        while (rs.next()) {
+            System.out.print("Book Id : " + rs.getInt(1) + " -> ");
+            System.out.println("Book Name : " + rs.getString(2));
+        }
+    }
+
+    public void printContactBookRegisterTable() throws SQLException {
+        String query = "SELECT * FROM contactBookRegister";
+        s = con.createStatement();
+        ResultSet rs = s.executeQuery(query);
+        System.out.println("\nContact Book Register table -> ");
+        while (rs.next()) {
+            System.out.print("Contact Id : " + rs.getInt(1) + " -> ");
+            System.out.println("Book Id : " + rs.getInt(2));
+        }
     }
 }
