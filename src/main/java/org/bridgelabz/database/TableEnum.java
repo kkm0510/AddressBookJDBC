@@ -10,7 +10,8 @@ public enum TableEnum {
             "state varchar(30) not null, " +
             "pin varchar(6) not null, " +
             "phoneNumber varchar(10) not null, " +
-            "email varchar(150) not null"),
+            "email varchar(150) not null, " +
+            "dateAdded DATE"),
 
     BOOKS ("books","bookId int auto_increment primary key, bookName varchar(30) not null"),
 

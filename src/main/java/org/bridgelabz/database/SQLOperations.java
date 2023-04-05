@@ -3,6 +3,7 @@ package org.bridgelabz.database;
 import org.bridgelabz.model.Contact;
 
 import java.sql.*;
+import java.sql.Date;
 import java.util.*;
 
 public class SQLOperations {
@@ -80,7 +81,7 @@ public class SQLOperations {
     }
 
     public void insertDataInContactsTable(List<Contact> list) throws SQLException {
-        String parameters = "firstName, lastName, address, city, state, pin, phoneNumber, email";
+        String parameters = "firstName, lastName, address, city, state, pin, phoneNumber, email, dateAdded";
         for (Contact c : list) {
             String queryForCheck = "SELECT COUNT(*) FROM contacts WHERE phoneNumber = ?";
             ps = con.prepareStatement(queryForCheck);
@@ -89,7 +90,7 @@ public class SQLOperations {
             rs.next();
             int count = rs.getInt(1);
             if (count > 0) continue;
-            String queryForInsert = "INSERT INTO contacts (" + parameters + ") VALUES (?,?,?,?,?,?,?,?)";
+            String queryForInsert = "INSERT INTO contacts (" + parameters + ") VALUES (?,?,?,?,?,?,?,?,CURDATE())";
             ps = con.prepareStatement(queryForInsert);
             ps.setString(1, c.getFirstName());
             ps.setString(2, c.getLastName());
@@ -291,6 +292,7 @@ public class SQLOperations {
             for (int i = 2; i <= 9; i++) {
                 System.out.print(rs.getString(i) + "  ");
             }
+            System.out.println(rs.getDate(10));
             System.out.println();
         }
     }
@@ -341,6 +343,17 @@ public class SQLOperations {
                 "WHERE b.bookId=?";
         ps = con.prepareStatement(query);
         ps.setInt(1, bookId);
+        ResultSet rs = ps.executeQuery();
+        printContactsResultSet(rs);
+    }
+
+    public void printContactsBetweenGivenDates() throws SQLException {
+        String startDate = "2023-04-5";
+        String endDate = "2023-04-10";
+        String query = "SELECT * FROM CONTACTS WHERE dateAdded BETWEEN ? AND ?";
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setString(1, startDate);
+        ps.setString(2, endDate);
         ResultSet rs = ps.executeQuery();
         printContactsResultSet(rs);
     }
