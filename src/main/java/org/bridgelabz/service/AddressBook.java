@@ -230,17 +230,21 @@ public class AddressBook {
         Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.print("Count menu -> \nEnter choice : (1)Count by city (2)Count by state (0)Go back to main menu : ");
-            int choice = sc.nextInt();
-            String parameter = null;
-            switch (choice) {
-                case COUNT_BY_CITY -> parameter = "city";
-                case COUNT_BY_STATE -> parameter = "state";
-                case EXIT -> {
-                    return;
+            try {
+                int choice = sc.nextInt();
+                String parameter;
+                switch (choice) {
+                    case COUNT_BY_CITY -> parameter = "city";
+                    case COUNT_BY_STATE -> parameter = "state";
+                    case EXIT -> {
+                        return;
+                    }
+                    default -> throw new AddressBookException("Wrong input!!!");
                 }
-                default -> System.out.println("Wrong input!!!");
+                System.out.println(SQLOperations.getInstance().count(parameter));
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
-            System.out.println(SQLOperations.getInstance().count(parameter));
         }
     }
 

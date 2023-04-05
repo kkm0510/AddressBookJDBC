@@ -104,14 +104,28 @@ public class SQLOperations {
 
     public void insertDataInTables(List<Contact> list) {
         try {
+            con.setAutoCommit(false);
             insertDataInContactsTable(list);
             insertDataInBooksTable(list);
             insertDataInContactBookTable(list);
+            con.commit();
             System.out.println("Data added in all tables");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            try {
+                con.rollback();
+            } catch (SQLException e1) {
+                System.out.println(e1.getMessage());
+            }
+        } finally {
+            try {
+                con.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
+
 
     public void insertDataInContactsTable(List<Contact> list) {
         String parameters = "firstName, lastName, address, city, state, pin, phoneNumber, email, dateAdded";
