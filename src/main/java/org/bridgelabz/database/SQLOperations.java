@@ -1,9 +1,7 @@
 package org.bridgelabz.database;
 
 import org.bridgelabz.model.Contact;
-
 import java.sql.*;
-import java.sql.Date;
 import java.util.*;
 
 public class SQLOperations {
@@ -51,11 +49,12 @@ public class SQLOperations {
         System.out.println("Connected");
     }
 
-    public void createDatabase() throws SQLException {
+    public int createDatabase() throws SQLException {
         String query = "CREATE DATABASE addressbook";
         s = con.createStatement();
-        s.executeUpdate(query);
+        int rowsAffected=s.executeUpdate(query);
         System.out.println("Database created");
+        return rowsAffected;
     }
 
     public void connectToDatabase() throws SQLException {
@@ -292,7 +291,7 @@ public class SQLOperations {
             for (int i = 2; i <= 9; i++) {
                 System.out.print(rs.getString(i) + "  ");
             }
-            System.out.println(rs.getDate(10));
+            System.out.print(rs.getDate(10));
             System.out.println();
         }
     }

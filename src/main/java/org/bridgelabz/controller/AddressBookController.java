@@ -18,7 +18,7 @@ public class AddressBookController {
         Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.print("Main menu -> \n(1)Load data from File (2)Create database " +
-                    "(3)Delete database (4)Search (5)Edit (6)Add contacts \n(7)Delete (8)Sort (9)Count " +
+                    "(3)Delete database (4)Search (5)Edit (6)Add contacts (7)Delete (8)Sort \n(9)Count " +
                     "(10)Print all tables (11)Print address book (12)Use database " +
                     "(13)Print contacts in particular date range (0)Exit : ");
             try {
