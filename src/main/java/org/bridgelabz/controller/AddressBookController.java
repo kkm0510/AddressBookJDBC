@@ -12,7 +12,7 @@ public class AddressBookController {
     public static void main(String[] args) {
         DatabaseOperations db=SQLOperations.getInstance();
         db.initializeDatabase();
-        AddressBook ab = new AddressBook(db);
+        AddressBook ab = new AddressBook();
         Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.print("Main menu -> \n(1)Load data from File (2)Create database " +
@@ -23,15 +23,15 @@ public class AddressBookController {
                 int choice = sc.nextInt();
                 sc.nextLine();
                 switch (choice) {
-                    case FILE_IO -> ab.loadDataFromFile();
+                    case FILE_IO -> ab.loadDataFromFile(db);
                     case INITIALIZE_DATABASE -> db.initializeDatabase();
                     case DROP_DATABASE -> db.deleteDatabase();
-                    case SEARCH -> ab.searchMenu();
-                    case EDIT -> ab.edit();
-                    case ADD -> ab.addContacts();
-                    case DELETE -> ab.deleteContact();
-                    case SORT -> ab.sort();
-                    case COUNT -> ab.count();
+                    case SEARCH -> ab.searchMenu(db);
+                    case EDIT -> ab.edit(db);
+                    case ADD -> ab.addContacts(db);
+                    case DELETE -> ab.deleteContact(db);
+                    case SORT -> ab.sort(db);
+                    case COUNT -> ab.count(db);
                     case PRINT_TABLES -> db.printAllTables();
                     case PRINT_ADDRESS_BOOK -> db.printAddressBookContacts();
                     case USE_DATABASE -> db.connectToDatabase();
