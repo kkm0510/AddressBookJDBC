@@ -7,7 +7,7 @@ import org.bridgelabz.model.Contact;
 import java.sql.*;
 import java.util.*;
 
-public class SQLOperations {
+public class SQLOperations implements  DatabaseOperations{
 
     private static SQLOperations sql;
     private Connection con;
@@ -22,6 +22,7 @@ public class SQLOperations {
         return sql;
     }
 
+    @Override
     public void initializeDatabase() {
         try {
             if (con == null || con.isClosed()) connectToServer();
@@ -33,6 +34,7 @@ public class SQLOperations {
         }
     }
 
+    @Override
     public void deleteDatabase() {
         try {
             String query = "DROP DATABASE addressbook";
@@ -44,6 +46,7 @@ public class SQLOperations {
         }
     }
 
+    @Override
     public void closeConnection() {
         try {
             deleteDatabase();
@@ -54,6 +57,7 @@ public class SQLOperations {
         }
     }
 
+    @Override
     public void connectToServer() {
         String url = System.getenv("dbServerURL");
         String user = System.getenv("dbUser");
@@ -66,6 +70,7 @@ public class SQLOperations {
         }
     }
 
+    @Override
     public int createDatabase() {
         try {
             String query = "CREATE DATABASE addressbook";
@@ -79,6 +84,7 @@ public class SQLOperations {
         return 0;
     }
 
+    @Override
     public void connectToDatabase() {
         try {
             String query = "USE addressbook";
@@ -89,7 +95,7 @@ public class SQLOperations {
         }
     }
 
-    public void createTable() {
+    private void createTable() {
         TableEnum[] arr = TableEnum.values();
         try {
             for (TableEnum table : arr) {
@@ -102,6 +108,7 @@ public class SQLOperations {
         }
     }
 
+    @Override
     public void insertDataInTables(List<Contact> list) {
         try {
             con.setAutoCommit(false);
@@ -127,7 +134,7 @@ public class SQLOperations {
     }
 
 
-    public void insertDataInContactsTable(List<Contact> list) {
+    private void insertDataInContactsTable(List<Contact> list) {
         String parameters = "firstName, lastName, address, city, state, pin, phoneNumber, email, dateAdded";
         try {
             for (Contact c : list) {
@@ -155,7 +162,7 @@ public class SQLOperations {
         }
     }
 
-    public void insertDataInBooksTable(List<Contact> list) throws SQLException {
+    private void insertDataInBooksTable(List<Contact> list) throws SQLException {
         String parameters = "bookName";
         for (Contact c : list) {
             String queryForCheck = "SELECT COUNT(*) FROM books WHERE bookName = ?";
@@ -172,7 +179,7 @@ public class SQLOperations {
         }
     }
 
-    public void insertDataInContactBookTable(List<Contact> list) {
+    private void insertDataInContactBookTable(List<Contact> list) {
         String parameters = "contactId, bookId";
         try {
             for (Contact c : list) {
@@ -199,7 +206,7 @@ public class SQLOperations {
         }
     }
 
-    public int searchContactIdOrBookIdInDatabase(String selectParameter, String tableName, String whereParameter) {
+    private int searchContactIdOrBookIdInDatabase(String selectParameter, String tableName, String whereParameter) {
         try {
             String query = "SELECT " + selectParameter + " from " + tableName + " where " + whereParameter;
             Statement s = con.createStatement();
@@ -212,7 +219,7 @@ public class SQLOperations {
         return -1;
     }
 
-    public List<Contact> searchList(ResultSet rs, int type) {
+    private List<Contact> searchList(ResultSet rs, int type) {
         List<Contact> list = new LinkedList<>();
         try {
             while (rs.next()) {
@@ -234,6 +241,7 @@ public class SQLOperations {
         return list;
     }
 
+    @Override
     public List<Contact> searchByName(String firstName, String lastName) {
         String query = "SELECT b.bookName, c.firstName, c.lastName, c.address, c.city, c.state, c.pin, c.phoneNumber, c.email " +
                 "FROM contacts c " +
@@ -253,6 +261,7 @@ public class SQLOperations {
         return list;
     }
 
+    @Override
     public List<Contact> searchByCity(String city) {
         String query = "SELECT b.bookName, c.firstName, c.lastName, c.address, c.city, c.state, c.pin, c.phoneNumber, c.email " +
                 "FROM contacts c " +
@@ -271,6 +280,7 @@ public class SQLOperations {
         return list;
     }
 
+    @Override
     public List<Contact> searchByState(String state) {
         String query = "SELECT b.bookName, c.firstName, c.lastName, c.address, c.city, c.state, c.pin, c.phoneNumber, c.email " +
                 "FROM contacts c " +
@@ -289,6 +299,7 @@ public class SQLOperations {
         return list;
     }
 
+    @Override
     public void delete(int bookId, String firstName, String lastName) {
         try {
             int id = getContactId(bookId, firstName, lastName);
@@ -312,6 +323,7 @@ public class SQLOperations {
         }
     }
 
+    @Override
     public List<Contact> sort(String parameter) {
         if (parameter.equals("name")) parameter = "CONCAT (firstName, ' ', lastName)";
         String query = "SELECT * FROM CONTACTS ORDER BY " + parameter;
@@ -326,6 +338,7 @@ public class SQLOperations {
         return list;
     }
 
+    @Override
     public Map<String, Integer> count(String parameter) {
         String query = "SELECT " + parameter + ", COUNT(*) FROM CONTACTS GROUP BY " + parameter;
         Map<String, Integer> map = new HashMap<>();
@@ -339,6 +352,7 @@ public class SQLOperations {
         return map;
     }
 
+    @Override
     public void edit(String whatToEdit, String newValue, int id) {
         String query = "UPDATE contacts SET " + whatToEdit + " = ? WHERE id = ?";
         try {
@@ -351,6 +365,7 @@ public class SQLOperations {
         }
     }
 
+    @Override
     public int getContactId(int bookId, String firstName, String lastName) {
         String query = "SELECT c.* " +
                 "FROM contacts c " +
@@ -373,7 +388,7 @@ public class SQLOperations {
         return new Scanner(System.in).nextInt();
     }
 
-    public void printContactsResultSet(ResultSet rs) {
+    private void printContactsResultSet(ResultSet rs) {
         try {
             while (rs.next()) {
                 System.out.print("Id : " + rs.getInt(1) + "  ");
@@ -388,13 +403,14 @@ public class SQLOperations {
         }
     }
 
+    @Override
     public void printAllTables() {
         printContactsTable();
         printBooksTable();
         printContactBookRegisterTable();
     }
 
-    public void printContactsTable() {
+    private void printContactsTable() {
         String query = "SELECT * FROM contacts";
         try {
             Statement s = con.createStatement();
@@ -406,6 +422,7 @@ public class SQLOperations {
         }
     }
 
+    @Override
     public void printBooksTable() {
         String query = "SELECT * FROM books";
         try {
@@ -421,7 +438,7 @@ public class SQLOperations {
         }
     }
 
-    public void printContactBookRegisterTable() {
+    private void printContactBookRegisterTable() {
         String query = "SELECT * FROM contactBookRegister";
         try {
             Statement s = con.createStatement();
@@ -436,6 +453,7 @@ public class SQLOperations {
         }
     }
 
+    @Override
     public void printAddressBookContacts() {
         printBooksTable();
         System.out.print("Select book id : ");
@@ -454,6 +472,7 @@ public class SQLOperations {
         }
     }
 
+    @Override
     public void printContactsBetweenGivenDates() {
         String startDate = "2023-04-5";
         String endDate = "2023-04-10";

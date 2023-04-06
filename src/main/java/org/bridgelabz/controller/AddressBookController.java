@@ -1,5 +1,6 @@
 package org.bridgelabz.controller;
 
+import org.bridgelabz.database.DatabaseOperations;
 import org.bridgelabz.database.SQLOperations;
 import org.bridgelabz.exception.AddressBookException;
 import org.bridgelabz.service.AddressBook;
@@ -9,8 +10,9 @@ import static  org.bridgelabz.util.Util.*;
 public class AddressBookController {
 
     public static void main(String[] args) {
-        AddressBook ab = new AddressBook();
-        SQLOperations.getInstance().initializeDatabase();
+        DatabaseOperations db=SQLOperations.getInstance();
+        db.initializeDatabase();
+        AddressBook ab = new AddressBook(db);
         Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.print("Main menu -> \n(1)Load data from File (2)Create database " +
@@ -22,20 +24,20 @@ public class AddressBookController {
                 sc.nextLine();
                 switch (choice) {
                     case FILE_IO -> ab.loadDataFromFile();
-                    case INITIALIZE_DATABASE -> SQLOperations.getInstance().initializeDatabase();
-                    case DROP_DATABASE -> SQLOperations.getInstance().deleteDatabase();
+                    case INITIALIZE_DATABASE -> db.initializeDatabase();
+                    case DROP_DATABASE -> db.deleteDatabase();
                     case SEARCH -> ab.searchMenu();
                     case EDIT -> ab.edit();
                     case ADD -> ab.addContacts();
                     case DELETE -> ab.deleteContact();
                     case SORT -> ab.sort();
                     case COUNT -> ab.count();
-                    case PRINT_TABLES -> SQLOperations.getInstance().printAllTables();
-                    case PRINT_ADDRESS_BOOK -> SQLOperations.getInstance().printAddressBookContacts();
-                    case USE_DATABASE -> SQLOperations.getInstance().connectToDatabase();
-                    case PRINT_DATE_WISE -> SQLOperations.getInstance().printContactsBetweenGivenDates();
+                    case PRINT_TABLES -> db.printAllTables();
+                    case PRINT_ADDRESS_BOOK -> db.printAddressBookContacts();
+                    case USE_DATABASE -> db.connectToDatabase();
+                    case PRINT_DATE_WISE -> db.printContactsBetweenGivenDates();
                     case EXIT -> {
-                        SQLOperations.getInstance().closeConnection();
+                        db.closeConnection();
                         return;
                     }
                     default -> throw new AddressBookException("Wrong input");

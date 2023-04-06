@@ -1,5 +1,6 @@
 package org.bridgelabz.service;
 
+import org.bridgelabz.database.DatabaseOperations;
 import org.bridgelabz.database.SQLOperations;
 import org.bridgelabz.exception.AddressBookException;
 import org.bridgelabz.fileinput.CSVOperations;
@@ -17,6 +18,12 @@ import static org.bridgelabz.util.Util.*;
 
 public class AddressBook {
 
+    private final DatabaseOperations DB;
+
+    public AddressBook(DatabaseOperations db){
+        DB=db;
+    }
+
     public void loadDataFromFile() throws AddressBookException {
         Scanner sc = new Scanner(System.in);
         while (true) {
@@ -33,7 +40,7 @@ public class AddressBook {
                 }
                 default -> throw new AddressBookException("Wrong input!!!");
             }
-            SQLOperations.getInstance().insertDataInTables(file.getData());
+            DB.insertDataInTables(file.getData());
         }
     }
 
@@ -67,7 +74,7 @@ public class AddressBook {
             listOfContacts.add(c);
             count++;
         }
-        SQLOperations.getInstance().insertDataInTables(listOfContacts);
+        DB.insertDataInTables(listOfContacts);
     }
 
     public void searchMenu() {
@@ -98,7 +105,7 @@ public class AddressBook {
         System.out.print("Enter last name : ");
         String lastName = sc.next();
         sc.nextLine();
-        System.out.println(SQLOperations.getInstance().searchByName(firstName, lastName));
+        System.out.println(DB.searchByName(firstName, lastName));
     }
 
     public void searchByCity() {
@@ -106,7 +113,7 @@ public class AddressBook {
         System.out.print("Enter city : ");
         String city = sc.next();
         sc.nextLine();
-        System.out.println(SQLOperations.getInstance().searchByCity(city));
+        System.out.println(DB.searchByCity(city));
     }
 
     public void searchByState() {
@@ -114,12 +121,12 @@ public class AddressBook {
         System.out.print("Enter state : ");
         String state = sc.next();
         sc.nextLine();
-        System.out.println(SQLOperations.getInstance().searchByState(state));
+        System.out.println(DB.searchByState(state));
     }
 
     public void edit() {
         Scanner sc = new Scanner(System.in);
-        SQLOperations.getInstance().printBooksTable();
+        DB.printBooksTable();
         System.out.print("Enter book id from which you want to delete : ");
         try {
             int bookId = sc.nextInt();
@@ -128,7 +135,7 @@ public class AddressBook {
             String firstName = sc.nextLine();
             System.out.print("Enter last name : ");
             String lastName = sc.nextLine();
-            int id = SQLOperations.getInstance().getContactId(bookId, firstName, lastName);
+            int id = DB.getContactId(bookId, firstName, lastName);
             System.out.print("What do you want to edit? \n" +
                     "(1)First name (2)Last name (3)Address (4)City (5)State (6)Pin (7)Phone number (8)Email : ");
             int choice = sc.nextInt();
@@ -177,7 +184,7 @@ public class AddressBook {
                 }
                 default -> System.out.println("Wrong input!!!");
             }
-            SQLOperations.getInstance().edit(whatToEdit, newValue, id);
+            DB.edit(whatToEdit, newValue, id);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -185,7 +192,7 @@ public class AddressBook {
 
     public void deleteContact() throws AddressBookException {
         Scanner sc = new Scanner(System.in);
-        SQLOperations.getInstance().printBooksTable();
+        DB.printBooksTable();
         System.out.print("Enter book id from which you want to delete : ");
         try {
             int bookId = sc.nextInt();
@@ -194,7 +201,7 @@ public class AddressBook {
             String firstName = sc.nextLine();
             System.out.print("Enter last name : ");
             String lastName = sc.nextLine();
-            SQLOperations.getInstance().delete(bookId, firstName, lastName);
+            DB.delete(bookId, firstName, lastName);
         } catch (InputMismatchException e) {
             throw new AddressBookException("Wrong Input");
         }
@@ -219,7 +226,7 @@ public class AddressBook {
                     default -> System.out.println("Wrong input!!!");
                 }
                 if (parameter != null)
-                    SQLOperations.getInstance().sort(parameter).forEach(Contact::print);
+                    DB.sort(parameter).forEach(Contact::print);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -241,7 +248,7 @@ public class AddressBook {
                     }
                     default -> throw new AddressBookException("Wrong input!!!");
                 }
-                System.out.println(SQLOperations.getInstance().count(parameter));
+                System.out.println(DB.count(parameter));
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
