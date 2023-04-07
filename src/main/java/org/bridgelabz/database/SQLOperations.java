@@ -3,6 +3,7 @@ package org.bridgelabz.database;
 import static org.bridgelabz.util.Util.*;
 
 import org.bridgelabz.model.Contact;
+import org.bridgelabz.util.TableEnum;
 
 import java.sql.*;
 import java.util.*;

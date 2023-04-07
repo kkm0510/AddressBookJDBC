@@ -1,4 +1,4 @@
-package org.bridgelabz.database;
+package org.bridgelabz.util;
 
 public enum TableEnum {
 
