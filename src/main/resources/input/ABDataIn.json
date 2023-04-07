@@ -1,18 +1,17 @@
-[
+{
+  "Friends": [
     {
-      "bookName": "Friends",
-      "firstName": "Ram",
-      "lastName": "Mohan",
+      "firstName": "Shrey",
+      "lastName": "Bhatt",
       "address": "faasasfsdg",
       "city": "Tehri",
       "state": "Uttarakhand",
       "pin": "248006",
-      "phoneNumber": "9645513256",
+      "phoneNumber": "9477513256",
       "email": "shreybhatt@gmail.com"
     },
     {
-      "bookName": "Friends",
-      "firstName": "Akshay",
+      "firstName": "Aviral",
       "lastName": "Gaur",
       "address": "sajdsaha",
       "city": "Mumbai",
@@ -22,29 +21,28 @@
       "email": "ag@gmail.com"
     },
     {
-      "bookName": "Friends",
-      "firstName": "Shubh",
-      "lastName": "Swastik",
+      "firstName": "Saurabh",
+      "lastName": "Bahuguna",
       "address": "faasasfsdg",
       "city": "Dehradun",
       "state": "Uttarakhand",
       "pin": "248006",
-      "phoneNumber": "9525813256",
+      "phoneNumber": "9477513256",
       "email": "shreybhatt@gmail.com"
-    },
+    }
+  ],
+  "Family": [
     {
-      "bookName": "Family",
-      "firstName": "Kashish",
-      "lastName": "Verma",
+      "firstName": "Kamal",
+      "lastName": "Kanti",
       "address": "sadjhsjh",
       "city": "Dehradun",
       "state": "Uttarakhand",
       "pin": "248001",
-      "phoneNumber": "9486549342",
+      "phoneNumber": "9411549342",
       "email": "kamalkanti@gmail.com"
     },
     {
-      "bookName": "Family",
       "firstName": "Avi",
       "lastName": "Saini",
       "address": "sadkjfhjk",
@@ -53,9 +51,10 @@
       "pin": "246001",
       "phoneNumber": "9411543265",
       "email": "avisaini@gmail.com"
-    },
+    }
+  ],
+  "Relatives": [
     {
-      "bookName": "Relatives",
       "firstName": "Aditya",
       "lastName": "Singh",
       "address": "sadkjshd",
@@ -66,7 +65,6 @@
       "email": "am@gmail.com"
     },
     {
-      "bookName": "Distant Relatives",
       "firstName": "Rishu",
       "lastName": "Chaudhary",
       "address": "sadasjdhh",
@@ -77,7 +75,6 @@
       "email": "rc@gmail.com"
     },
     {
-      "bookName": "Distant Relatives",
       "firstName": "Aditya",
       "lastName": "Singh",
       "address": "sadkjshd",
@@ -88,3 +85,4 @@
       "email": "am@gmail.com"
     }
   ]
+}
