@@ -74,11 +74,8 @@ public class AddressBook {
         dataAdded=true;
     }
 
-    public void searchMenu(DatabaseOperations db) {
-        if(!dataAdded){
-            System.out.println("no data added yet");
-            return;
-        }
+    public void searchMenu(DatabaseOperations db) throws AddressBookException {
+        if(!dataAdded) throw new AddressBookException("no data added yet");
         Scanner sc = new Scanner(System.in);
         while (true) {
             try {
@@ -99,11 +96,8 @@ public class AddressBook {
         }
     }
 
-    public void searchByName(DatabaseOperations db) {
-        if(!dataAdded){
-            System.out.println("no data added yet");
-            return;
-        }
+    public void searchByName(DatabaseOperations db) throws AddressBookException {
+        if(!dataAdded) throw new AddressBookException("no data added yet");
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter first name : ");
         String firstName = sc.next();
@@ -113,11 +107,8 @@ public class AddressBook {
         System.out.println(db.searchByName(firstName, lastName));
     }
 
-    public void searchByCity(DatabaseOperations db) {
-        if(!dataAdded){
-            System.out.println("no data added yet");
-            return;
-        }
+    public void searchByCity(DatabaseOperations db) throws AddressBookException {
+        if(!dataAdded) throw new AddressBookException("no data added yet");
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter city : ");
         String city = sc.next();
@@ -125,11 +116,8 @@ public class AddressBook {
         System.out.println(db.searchByCity(city));
     }
 
-    public void searchByState(DatabaseOperations db) {
-        if(!dataAdded){
-            System.out.println("no data added yet");
-            return;
-        }
+    public void searchByState(DatabaseOperations db) throws AddressBookException {
+        if(!dataAdded) throw new AddressBookException("no data added yet");
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter state : ");
         String state = sc.next();
@@ -137,11 +125,8 @@ public class AddressBook {
         System.out.println(db.searchByState(state));
     }
 
-    public void edit(DatabaseOperations db) {
-        if(!dataAdded){
-            System.out.println("no data added yet");
-            return;
-        }
+    public void edit(DatabaseOperations db) throws AddressBookException {
+        if(!dataAdded) throw new AddressBookException("no data added yet");
         Scanner sc = new Scanner(System.in);
         db.printBooksTable();
         System.out.print("Enter book id from which you want to delete : ");
@@ -208,10 +193,7 @@ public class AddressBook {
     }
 
     public void deleteContact(DatabaseOperations db) throws AddressBookException {
-        if(!dataAdded){
-            System.out.println("no data added yet");
-            return;
-        }
+        if(!dataAdded) throw new AddressBookException("no data added yet");
         Scanner sc = new Scanner(System.in);
         db.printBooksTable();
         System.out.print("Enter book id from which you want to delete : ");
@@ -228,11 +210,8 @@ public class AddressBook {
         }
     }
 
-    public void sort(DatabaseOperations db) {
-        if(!dataAdded){
-            System.out.println("no data added yet");
-            return;
-        }
+    public void sort(DatabaseOperations db) throws AddressBookException {
+        if(!dataAdded) throw new AddressBookException("no data added yet");
         Scanner sc = new Scanner(System.in);
         while (true) {
             try {
@@ -258,11 +237,8 @@ public class AddressBook {
         }
     }
 
-    public void count(DatabaseOperations db) {
-        if(!dataAdded){
-            System.out.println("no data added yet");
-            return;
-        }
+    public void count(DatabaseOperations db) throws AddressBookException {
+        if(!dataAdded) throw new AddressBookException("no data added yet");
         Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.print("Count menu -> \nEnter choice : (1)Count by city (2)Count by state (0)Go back to main menu : ");
