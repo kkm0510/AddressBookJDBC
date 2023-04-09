@@ -17,6 +17,8 @@ import static org.bridgelabz.util.Util.*;
 
 public class AddressBook {
 
+    private boolean dataAdded=false;
+
     public void loadDataFromFile(DatabaseOperations db) throws AddressBookException {
         Scanner sc = new Scanner(System.in);
         while (true) {
@@ -34,6 +36,7 @@ public class AddressBook {
                 default -> throw new AddressBookException("Wrong input!!!");
             }
             db.insertDataInTables(file.getData());
+            dataAdded=true;
         }
     }
 
@@ -68,9 +71,14 @@ public class AddressBook {
             count++;
         }
         db.insertDataInTables(listOfContacts);
+        dataAdded=true;
     }
 
     public void searchMenu(DatabaseOperations db) {
+        if(!dataAdded){
+            System.out.println("no data added yet");
+            return;
+        }
         Scanner sc = new Scanner(System.in);
         while (true) {
             try {
@@ -92,6 +100,10 @@ public class AddressBook {
     }
 
     public void searchByName(DatabaseOperations db) {
+        if(!dataAdded){
+            System.out.println("no data added yet");
+            return;
+        }
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter first name : ");
         String firstName = sc.next();
@@ -102,6 +114,10 @@ public class AddressBook {
     }
 
     public void searchByCity(DatabaseOperations db) {
+        if(!dataAdded){
+            System.out.println("no data added yet");
+            return;
+        }
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter city : ");
         String city = sc.next();
@@ -110,6 +126,10 @@ public class AddressBook {
     }
 
     public void searchByState(DatabaseOperations db) {
+        if(!dataAdded){
+            System.out.println("no data added yet");
+            return;
+        }
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter state : ");
         String state = sc.next();
@@ -118,6 +138,10 @@ public class AddressBook {
     }
 
     public void edit(DatabaseOperations db) {
+        if(!dataAdded){
+            System.out.println("no data added yet");
+            return;
+        }
         Scanner sc = new Scanner(System.in);
         db.printBooksTable();
         System.out.print("Enter book id from which you want to delete : ");
@@ -184,6 +208,10 @@ public class AddressBook {
     }
 
     public void deleteContact(DatabaseOperations db) throws AddressBookException {
+        if(!dataAdded){
+            System.out.println("no data added yet");
+            return;
+        }
         Scanner sc = new Scanner(System.in);
         db.printBooksTable();
         System.out.print("Enter book id from which you want to delete : ");
@@ -201,6 +229,10 @@ public class AddressBook {
     }
 
     public void sort(DatabaseOperations db) {
+        if(!dataAdded){
+            System.out.println("no data added yet");
+            return;
+        }
         Scanner sc = new Scanner(System.in);
         while (true) {
             try {
@@ -227,6 +259,10 @@ public class AddressBook {
     }
 
     public void count(DatabaseOperations db) {
+        if(!dataAdded){
+            System.out.println("no data added yet");
+            return;
+        }
         Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.print("Count menu -> \nEnter choice : (1)Count by city (2)Count by state (0)Go back to main menu : ");
